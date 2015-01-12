@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/silver">
+    <ImageView
+            android:id="@+id/helpIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/help"/>
+
+    <ImageView
+            android:id="@+id/musicIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/music"
+            android:visibility="invisible"/>
+
+    <ImageView
+            android:id="@+id/nomusicIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/nomusic"
+            android:visibility="invisible"/>
+
+    <Button android:id="@+id/buttonGo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/tapbutton_selector"
+            android:textColor="@color/black"
+            android:text="@string/show_magic_color_en"/>
+
+    <!--<ImageView-->
+            <!--android:id="@+id/buttonGo"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:background="@drawable/tapbutton_selector"-->
+            <!--android:src="@drawable/tapbutton"/>-->
+    <RelativeLayout
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/magicColor"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:padding="20dp"
+            android:background="@color/black"
+            android:layout_marginBottom="100dp"
+            android:visibility="invisible">
+
+    </RelativeLayout>
+
+</RelativeLayout>
+

@@ -2,28 +2,31 @@ package com.denyszaiats.magicsquare;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import com.denyszaiats.magicsquare.drawer.DrawLine;
 import com.denyszaiats.magicsquare.drawer.DrawRect;
 import com.denyszaiats.magicsquare.drawer.DrawView;
 
 import java.util.*;
 
-public class MagicSquare extends Activity {
+public class MagicSquare extends Activity implements Animation.AnimationListener {
 
     private Helper helper;
-    private Button tryAgainButton;
+    private Button buttonGo;
     private RelativeLayout areaView;
+    private RelativeLayout magicColorArea;
+    private ImageView helpButton;
+    private ImageView musicButton;
+    private ImageView nomusicButton;
     private LinkedList<Integer> usedCoordinates;
     private LinkedList<DrawRect> listCreatedViews;
     private LinkedList<DrawLine> listCreatedLines;
@@ -38,18 +41,26 @@ public class MagicSquare extends Activity {
     private int maxX;
     private int maxY;
     private int countShapes = 2;
-    private int size = 105;
+    private int size;
     private int genIndexColorRect;
     private int width;
     private int magicColor;
     private int rectNumber;
+    private Animation anim;
+    private static final String IS_MUSIC = "IS_MUSIC";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.main_activity);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         helper = new Helper();
         areaView = (RelativeLayout) findViewById(R.id.mainLayout);
+        magicColorArea = (RelativeLayout) findViewById(R.id.magicColor);
+        helpButton = (ImageView) findViewById(R.id.helpIcon);
+        musicButton = (ImageView) findViewById(R.id.musicIcon);
+        nomusicButton = (ImageView) findViewById(R.id.nomusicIcon);
+        buttonGo = (Button) findViewById(R.id.buttonGo);
         colorMap = new HashMap<Integer, Integer>();
         size = helper.getShapeStartSize(this);
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -58,12 +69,67 @@ public class MagicSquare extends Activity {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, width);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         areaView.setLayoutParams(params);
-        areaView.setOnClickListener(new View.OnClickListener() {
+        int height = displaymetrics.heightPixels;
+        int buttonSize = width - height/2;
+        RelativeLayout.LayoutParams paramsButton = new RelativeLayout.LayoutParams(2*buttonSize, 2*buttonSize);
+        paramsButton.setMargins(5, 20, 5, 5);
+        paramsButton.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        buttonGo.setLayoutParams(paramsButton);
+        buttonGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                runGame();
+                if(buttonGo.getText().equals(getResources().getString(R.string.show_magic_color_en))) {
+                    drawMagicColor();
+                }
+                else{
+                    buttonGo.setText(getResources().getString(R.string.show_magic_color_en));
+                    magicColorArea.setAlpha(0.0f);
+                    runGame();
+                }
             }
         });
+
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        musicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchMusicIcon();
+            }
+        });
+
+        nomusicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchMusicIcon();
+            }
+        });
+
+       switchMusicIcon();
+
+        runGame();
+
+    }
+
+    private void switchMusicIcon(){
+        editor = prefs.edit();
+        boolean isMusic = prefs.getBoolean(IS_MUSIC, true);
+        if (isMusic){
+            musicButton.setVisibility(View.INVISIBLE);
+            nomusicButton.setVisibility(View.VISIBLE);
+            editor.putBoolean(IS_MUSIC, false);
+        }
+        else {
+            musicButton.setVisibility(View.VISIBLE);
+            nomusicButton.setVisibility(View.INVISIBLE);
+            editor.putBoolean(IS_MUSIC, true);
+        }
+        editor.commit();
     }
 
     private void runGame() {
@@ -183,6 +249,7 @@ public class MagicSquare extends Activity {
             if(rectNumber%9 == 0) {
                 drawRect.setBackgroundColor(magicColor);
             }
+
             else {
                 drawRect.setBackgroundColor(getResources().getColor(colorMap.get(genIndexColorRect)));
             }
@@ -203,15 +270,16 @@ public class MagicSquare extends Activity {
             while (areaView.indexOfChild(drawRect) == -1);
         }
 
-//        for (int i = 0; i < countShapes; i++) {
-//            if(Integer.valueOf(listCreatedViews.get(i).getText())== i) {
-//                areaView.addView(listCreatedViews.get(i));
-//            }
-//        }
+//        AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
+//        animation.setDuration(200);
+//        areaView.startAnimation(animation);
 
-        AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
-        animation.setDuration(200);
-        areaView.startAnimation(animation);
+        // load the animation
+        Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.slide_down_animation);
+        // set animation listener
+        anim.setAnimationListener(this);
+        areaView.setAnimation(anim);
 
     }
 
@@ -220,6 +288,28 @@ public class MagicSquare extends Activity {
         int paddingY = (areaView.getHeight()- maxY)/2;
 
         areaView.setPadding(paddingX, paddingY, paddingX, paddingY);
+    }
+
+    private void drawMagicColor(){
+        DrawRect drawRect = new DrawRect(this);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(pxFromDp(200),pxFromDp(200));
+        drawRect.setLayoutParams(params);
+        drawRect.setSideSize(pxFromDp(200));
+        drawRect.setBackgroundColor(magicColor);
+        drawRect.setText("");
+        //drawRect.setX(rectX);
+        //drawRect.setY(rectY);
+        magicColorArea.addView(drawRect);
+        magicColorArea.setAlpha(1.0f);
+
+        // load the animation
+        anim = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.animation);
+        // set animation listener
+        anim.setAnimationListener(this);
+        magicColorArea.setAnimation(anim);
+        buttonGo.setText(getResources().getString(R.string.try_again_en));
+
     }
 
     private int pxFromDp(float dp) {
@@ -295,5 +385,20 @@ public class MagicSquare extends Activity {
                 }
             }
         }
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
     }
 }

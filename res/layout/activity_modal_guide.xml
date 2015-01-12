@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <RelativeLayout
+            android:id="@+id/mainLayoutGuide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+
+        <ImageView
+                android:id="@+id/imageAboutIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_launcher"/>
+
+        <TextView
+                android:id="@+id/textGuideTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageAboutIcon"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:shadowColor="@color/black_overlay"
+                android:shadowRadius="4"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:textStyle="bold"
+                android:text="@string/game_guide_title_en"/>
+
+
+            <WebView android:id="@+id/textGuide"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@+id/textGuideTitle"
+                     android:layout_centerHorizontal="true"
+                     android:layout_marginTop="10dp"
+                     android:layout_marginLeft="5dp"
+                     android:layout_marginRight="5dp"
+                     android:background="@color/white">
+
+            </WebView>
+
+        <CheckBox
+                android:id="@+id/dontShowAgain"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_below="@id/textGuide"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:text="@string/dont_show_checkbox_en"
+                android:layout_centerHorizontal="true"
+                android:textStyle="italic"/>
+
+        <Button
+                android:id="@+id/buttonGuideOk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textGuide"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="45dp"
+                android:layout_marginBottom="10dp"
+                android:text="OK"
+                android:textSize="20dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:textColor="@color/white"
+                android:shadowColor="@color/black_overlay"
+                android:shadowRadius="4"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:textStyle="bold"
+                android:background="@drawable/tapbutton_selector"/>
+
+
+    </RelativeLayout>
+</ScrollView>
