@@ -9,10 +9,12 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class GuideModalActivity extends Activity{
 
     private RelativeLayout mainLayout;
+    private TextView guideTitle;
     private CheckBox dontShowAgain;
     private WebView textGuide;
     private SharedPreferences prefs;
@@ -29,7 +31,20 @@ public class GuideModalActivity extends Activity{
         dontShowAgain = (CheckBox) findViewById(R.id.dontShowAgain);
         textGuide = (WebView) findViewById(R.id.textGuide);
         closeGuide = (Button) findViewById(R.id.buttonGuideOk);
-        String guideText = "";
+        guideTitle = (TextView) findViewById(R.id.textGuideTitle);
+        String prefix = prefs.getString(Constants.PREFIX_LANG, "_en");
+        guideTitle.setText(getResources().getString(getResources().getIdentifier("game_guide_title" + prefix, "string", getPackageName())));
+        dontShowAgain.setText(getResources().getString(getResources().getIdentifier("dont_show_checkbox" + prefix, "string", getPackageName())));
+        String guideTextStep1 = getResources().getString(getResources().getIdentifier("guide_modal_step1" + prefix, "string", getPackageName()));
+        String guideTextStep2 = getResources().getString(getResources().getIdentifier("guide_modal_step2" + prefix, "string", getPackageName()));
+        String guideTextStep3 = getResources().getString(getResources().getIdentifier("guide_modal_step3" + prefix, "string", getPackageName()));
+        String guideTextStep4 = getResources().getString(getResources().getIdentifier("guide_modal_step4" + prefix, "string", getPackageName()));
+        String guideTextStep5 = getResources().getString(getResources().getIdentifier("guide_modal_step5" + prefix, "string", getPackageName()));
+
+        boolean showCheckbox = prefs.getBoolean(Constants.SHOW_CHECKBOX, true);
+        if(!showCheckbox){
+            mainLayout.removeView(dontShowAgain);
+        }
 
         closeGuide.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +58,7 @@ public class GuideModalActivity extends Activity{
         });
         String customHtml = "<html>" +
                                 "<head>" +
+                                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">" +
                                     "<style>" +
                                         "body{" +
                                         "color: #000000;" +
@@ -54,8 +70,13 @@ public class GuideModalActivity extends Activity{
                                         "font-size:16dp;}" +
                                     "</style>" +
                                 "</head>" +
-                                "<body>" + guideText + "</body>" +
+                                "<body>" +  guideTextStep1 + "<br>" +
+                                            guideTextStep2 + "<br>" +
+                                            guideTextStep3 + "<br>" +
+                                            guideTextStep4 + "<br>" +
+                                            guideTextStep5 + "<br>" +
+                                "</body>" +
                             "</html>";
-        textGuide.loadData(customHtml, "text/html", "UTF-8");
+        textGuide.loadData(customHtml, "text/html; charset=UTF-8", "UTF-8");
     }
 }

@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Magic Square</string>
+    <string name="app_name">Magic Color</string>
+    <!--EN-->
     <string name="show_magic_color_en">SHOW COLOR</string>
     <string name="try_again_en">TRY AGAIN?</string>
     <string name="game_guide_title_en">Game guide</string>
     <string name="dont_show_checkbox_en">Don\'t show this window again</string>
+    <string name="guide_modal_step1_en">1. Think up of a any two-digit number.</string>
+    <string name="guide_modal_step2_en">2. Subtract from it its constituent figures
+        (e.g., the number 54 must subtract 5 and 4 received 45. Or for 83 it will be 83 - 8 - 3 = 72).</string>
+    <string name="guide_modal_step3_en">3. In the table find this number and the color to which it corresponds.</string>
+    <string name="guide_modal_step4_en">4. Imagine this color and remember it.</string>
+    <string name="guide_modal_step5_en">5. Click on the button "SHOW COLOR". Application will guess what are You thinking about.</string>
+    <!--UA-->
+    <string name="show_magic_color_ua">ПОКАЗАТИ КОЛІР</string>
+    <string name="try_again_ua">ЩЕ РАЗ?</string>
+    <string name="game_guide_title_ua">Правила гри</string>
+    <string name="dont_show_checkbox_ua">Не показувати цього вікна знову</string>
+    <string name="guide_modal_step1_ua">1. Задумайте будь-яке двозначне число.</string>
+    <string name="guide_modal_step2_ua">2. Відніміть від нього його складові цифри
+        (наприклад, з числа 54 потрібно відняти 5 і 4, вийде 45. Або ж для числа 83 це буде 83 - 8 - 3 = 72).</string>
+    <string name="guide_modal_step3_ua">3. Знайдіть в таблиці це число і колір, якому воно відповідає.</string>
+    <string name="guide_modal_step4_ua">4. Уявіть собі подумки цей колір і запам"ятайте його.</string>
+    <string name="guide_modal_step5_ua">5. Натисніть кнопку "ПОКАЗАТИ КОЛІР". Програма відгадає колір, котрий Ви уявили.</string>
+    <!--RU-->
+    <string name="show_magic_color_ru">ПОКАЗАТЬ ЦВЕТ</string>
+    <string name="try_again_ru">ЕЩЕ РАЗ?</string>
+    <string name="game_guide_title_ru">Правила игры</string>
+    <string name="dont_show_checkbox_ru">Не показывать это окно больше</string>
+    <string name="guide_modal_step1_ru">1. Задумайте любое двухзначное число.</string>
+    <string name="guide_modal_step2_ru">2. Вычтите из него составляющие его цифры
+        (например, из числа 54 надо вычесть 5 и 4, получится 45. Или для 83 это будет 83 - 8 - 3 = 72).</string>
+    <string name="guide_modal_step3_ru">3. Найдите это число в таблице и цвет, которому оно соответствует..</string>
+    <string name="guide_modal_step4_ru">4. Вообразите мысленно себе этот цвет и запомните его.</string>
+    <string name="guide_modal_step5_ru">5. Щелкните на кнопку "ПОКАЗАТЬ ЦВЕТ". Программа угадает цвет, который Вы представили.</string>
 </resources>

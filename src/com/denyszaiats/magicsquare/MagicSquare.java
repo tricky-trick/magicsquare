@@ -1,8 +1,10 @@
 package com.denyszaiats.magicsquare;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -48,13 +50,16 @@ public class MagicSquare extends Activity implements Animation.AnimationListener
     private int rectNumber;
     private Animation anim;
     private static final String IS_MUSIC = "IS_MUSIC";
+    private String prefix;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = prefs.edit();
         helper = new Helper();
+        prefix = prefs.getString(Constants.PREFIX_LANG, "_en");
         areaView = (RelativeLayout) findViewById(R.id.mainLayout);
         magicColorArea = (RelativeLayout) findViewById(R.id.magicColor);
         helpButton = (ImageView) findViewById(R.id.helpIcon);
@@ -70,19 +75,20 @@ public class MagicSquare extends Activity implements Animation.AnimationListener
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         areaView.setLayoutParams(params);
         int height = displaymetrics.heightPixels;
-        int buttonSize = width - height/2;
-        RelativeLayout.LayoutParams paramsButton = new RelativeLayout.LayoutParams(2*buttonSize, 2*buttonSize);
+        int buttonSize = height - width - pxFromDp(80);
+        RelativeLayout.LayoutParams paramsButton = new RelativeLayout.LayoutParams(buttonSize, buttonSize);
         paramsButton.setMargins(5, 20, 5, 5);
         paramsButton.addRule(RelativeLayout.CENTER_HORIZONTAL);
         buttonGo.setLayoutParams(paramsButton);
+        buttonGo.setText(getResources().getString(getResources().getIdentifier("show_magic_color" + prefix, "string", getPackageName())));
         buttonGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(buttonGo.getText().equals(getResources().getString(R.string.show_magic_color_en))) {
+                if(buttonGo.getText().equals(getResources().getString(getResources().getIdentifier("show_magic_color" + prefix, "string", getPackageName())))) {
                     drawMagicColor();
                 }
                 else{
-                    buttonGo.setText(getResources().getString(R.string.show_magic_color_en));
+                    buttonGo.setText(getResources().getString(getResources().getIdentifier("show_magic_color" + prefix, "string", getPackageName())));
                     magicColorArea.setAlpha(0.0f);
                     runGame();
                 }
@@ -92,7 +98,11 @@ public class MagicSquare extends Activity implements Animation.AnimationListener
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                editor.putBoolean(Constants.SHOW_CHECKBOX, false);
+                editor.commit();
+                Intent i = new Intent(MagicSquare.this,
+                        GuideModalActivity.class);
+                startActivity(i);
             }
         });
 
@@ -114,10 +124,17 @@ public class MagicSquare extends Activity implements Animation.AnimationListener
 
         runGame();
 
+        boolean dontShowAgain = prefs.getBoolean(Constants.DONT_SHOW_AGAIN, false);
+        if (!dontShowAgain){
+            editor.putBoolean(Constants.SHOW_CHECKBOX, true);
+            editor.commit();
+            Intent i = new Intent(this,
+                    GuideModalActivity.class);
+            startActivity(i);
+        }
     }
 
     private void switchMusicIcon(){
-        editor = prefs.edit();
         boolean isMusic = prefs.getBoolean(IS_MUSIC, true);
         if (isMusic){
             musicButton.setVisibility(View.INVISIBLE);
@@ -250,9 +267,21 @@ public class MagicSquare extends Activity implements Animation.AnimationListener
                 drawRect.setBackgroundColor(magicColor);
             }
 
+            else if(rectNumber == 26 ||
+                    rectNumber == 37 ||
+                    rectNumber == 43 ||
+                    rectNumber == 44 ||
+                    rectNumber == 73 ||
+                    rectNumber == 83 ||
+                    rectNumber == 52 ||
+                    rectNumber == 62){
+                drawRect.setBackgroundColor(magicColor);
+            }
+
             else {
                 drawRect.setBackgroundColor(getResources().getColor(colorMap.get(genIndexColorRect)));
             }
+
             drawRect.setX(rectX);
             drawRect.setY(rectY);
             drawRect.setText(String.valueOf(rectNumber));
@@ -301,6 +330,11 @@ public class MagicSquare extends Activity implements Animation.AnimationListener
         //drawRect.setY(rectY);
         magicColorArea.addView(drawRect);
         magicColorArea.setAlpha(1.0f);
+        boolean playMusic = prefs.getBoolean(IS_MUSIC, true);
+        if(playMusic){
+            MediaPlayer mPlayer = MediaPlayer.create(MagicSquare.this, R.raw.magic_color);
+            mPlayer.start();
+        }
 
         // load the animation
         anim = AnimationUtils.loadAnimation(getApplicationContext(),
@@ -308,7 +342,7 @@ public class MagicSquare extends Activity implements Animation.AnimationListener
         // set animation listener
         anim.setAnimationListener(this);
         magicColorArea.setAnimation(anim);
-        buttonGo.setText(getResources().getString(R.string.try_again_en));
+        buttonGo.setText(getResources().getString(getResources().getIdentifier("try_again" + prefix, "string", getPackageName())));
 
     }
 
@@ -386,6 +420,13 @@ public class MagicSquare extends Activity implements Animation.AnimationListener
             }
         }
     }
+
+	@Override
+	public void onBackPressed() {
+        editor.putString(Constants.PREFIX_LANG, "");
+        editor.commit();
+        super.onBackPressed();
+	}
 
     @Override
     public void onAnimationStart(Animation animation) {

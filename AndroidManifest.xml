@@ -7,14 +7,27 @@
             android:minSdkVersion="11"
             android:targetSdkVersion="19"/>
 
-    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
-        <activity android:name="MagicSquare"
+    <application android:label="@string/app_name"
+                 android:icon="@drawable/ic_launcher"
+                 android:theme="@style/AppTheme">
+        <activity android:name=".LangActivity"
                   android:label="@string/app_name"
-                android:screenOrientation="portrait">
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".MagicSquare"
+                  android:label="@string/app_name"
+                android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+                android:name=".GuideModalActivity"
+                android:theme="@android:style/Theme.Dialog"
+                android:screenOrientation="portrait">
+        </activity>
+
     </application>
 </manifest>

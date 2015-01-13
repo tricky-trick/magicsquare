@@ -24,4 +24,6 @@
     <color name="pink">#FF1493</color>
     <color name="cyan">#00FFFF</color>
     <color name="dark_blue">#0000FF</color>
+    <color name="background">#00CCCC</color>
+    <color name="theme">#333333</color>
 </resources>
